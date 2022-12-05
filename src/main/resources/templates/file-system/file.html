@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: header">
+
+</head>
+
+<body>
+
+<section>
+
+  <style>
+      span {
+        cursor: pointer;
+      }
+    </style>
+
+  <div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+
+    <h1 class="m-5"> 파일 업다운로드 테스트 </h1>
+
+    <form>
+      <input id="deleteList" hidden>
+      <input id="fileInput" name="attachments" class="form-control" type="file" multiple hidden>
+      <button id="fileBtn" type="button" class="btn btn-danger m-3">file</button>
+    </form>
+    <ul id="fileBox">
+
+    </ul>
+
+    <button id="getFilesBtn" type="button" class="btn btn-danger m-3">서버 파일 목록 불러오기</button>
+    <ul id="getFilesBox">
+
+    </ul>
+  </div>
+
+  <script>
+      const fileBtn = document.getElementById('fileBtn');
+      const fileInput = document.getElementById('fileInput');
+      const fileBox = document.getElementById('fileBox');
+      const getFilesBtn = document.getElementById('getFilesBtn');
+      const getFilesBox = document.getElementById('getFilesBox');
+      const fileUrl = '/files/';
+
+      document.addEventListener("DOMContentLoaded", function () {
+        fileInput.addEventListener('change', fileInputChangeHandle, false);
+        fileBtn.addEventListener('click', function (event) {
+          document.getElementById('fileInput').click();
+        });
+        getFilesBtn.addEventListener('click', getFiles, false);
+      });
+
+      const fileHtmlUnit = (file) => {
+        let html = `
+                    <span onclick="fileDownload('${file.id}', '${file.originalName}')">${file.originalName}</span>
+                    <span style="cursor:pointer" onclick="fileDelete(this,'${file.id}')">
+                        <i class="bi bi-trash"></i>
+                   </span>
+          `;
+        return html;
+      };
+
+      const fileDownload = (id, fileName) => {
+        fetch(fileUrl + id)
+          .then(resp => resp.blob())
+          .then(data => {
+            let a = document.createElement("a");
+            a.href = window.URL.createObjectURL(data);
+            a.download = fileName;
+            a.click();
+          });
+      };
+
+      const fileInputChangeHandle = (event) => {
+        const input = document.querySelector('input[type="file"]');
+        let formData = new FormData();
+
+        for (const file of input.files) {
+          formData.append('attachments', file, file.name)
+        };
+
+        let fileList = event.target.files;
+
+        fetch(fileUrl, {
+          method: 'POST',
+          body: formData
+        })
+          .then(res => res.json())
+          .then(json => {
+            json.forEach(function (e, l) {
+              let li = document.createElement("li");
+              li.innerHTML = fileHtmlUnit(e);
+              fileBox.appendChild(li);
+            });
+          });
+      };
+
+      const getFiles = () => {
+        fetch(fileUrl)
+          .then(resp => resp.json())
+          .then(data => {
+            data.forEach(function (e, l) {
+              let li = document.createElement("li");
+              li.innerHTML = fileHtmlUnit(e);
+              getFilesBox.appendChild(li);
+            })
+          });
+      }
+
+      const fileDelete = (btn, id) => {
+        const deleteList = document.getElementById('deleteList');
+        deleteList.value += id + ",";
+        const options = {
+          method: 'DELETE'
+        }
+        fetch(fileUrl + id, options)
+          .then(resp => resp.json())
+          .then(data => console.log(data))
+          .catch(err => console.error(err));
+
+        btn.parentNode.remove();
+      };
+
+    </script>
+
+</section>
+
+</body>
+
+</html>

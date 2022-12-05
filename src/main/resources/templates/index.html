@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+
+    <div>
+        <h1 style="padding: 50px 0px 50px 0px;">네카라쿠배아!!!</h1>
+    </div>
+
+    <div class="jumbotron">
+        <p class="lead">시스템 관리</p>
+        <p>
+            <a th:class="|btn btn-lg btn-success|" th:href="@{/hakjuk/list}">학적 상태 목록</a>
+            <a th:class="|btn btn-lg btn-primary|" th:href="@{/account/list}">고객 목록</a>
+        </p>
+        <p class="lead">토큰 관리</p>
+        <p>
+            <a th:class="|btn btn-lg btn-dark|" href="/token-issue/list">토큰 발행 이력</a>
+            <a th:class="|btn btn-lg btn-secondary|" href="/">유효한 토큰 목록 (차준우, 999)</a>
+        </p>
+        <p class="lead">이력 관리</p>
+        <p>
+            <a th:class="|btn btn-lg btn-warning|" th:href="@{/history/request}">API 요청 이력</a>
+            <a th:class="|btn btn-lg btn-danger|" href="/history/error-list">오류 이력</a>
+        </p>
+        <p class="lead">제증명 발급 관리</p>
+        <p>
+            <a th:class="|btn btn-lg btn-info|" th:href="@{/corp-issue/list}">
+                기관별 제증명 발급 내역
+            </a>
+        </p>
+        <p class="lead">학생 인증 api</p>
+        <p>
+            <a th:class="|btn btn-lg|" th:href="@{/auth-api/test}" style="background-color: pink; border-color: pink;">
+                학생 인증 api 요청 테스트 (차준우)
+            </a>
+        </p>
+        <p class="lead">파일</p>
+        <p>
+            <a th:class="|btn btn-lg|" th:href="@{/file}" style="background-color: pink; border-color: pink;">
+                파일
+            </a>
+        </p>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+</div> <!-- /container -->
+
+</body>
+</html>

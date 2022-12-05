@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="header" th:fragment="bodyHeader">
+  <ul class="nav nav-pills pull-right">
+    <li>
+      <a th:onclick="|location.href='@{/}'|">
+        <img id="certpiaLogo"
+             th:src="@{/images/certpialogo.svg}"
+             th:style="|cursor:pointer;|"/>
+      </a>
+    </li>
+  </ul>
+</div>
